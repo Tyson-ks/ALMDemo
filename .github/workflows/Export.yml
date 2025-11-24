@@ -66,3 +66,18 @@ jobs:
           git commit -m "DemoSolution Changes" || echo "No changes to commit"
           git pull origin main --rebase
           git push origin main
+
+      - name: Pack Solution
+        uses: microsoft/powerplatform-actions/pack-solution@v1
+        with:
+          solution-file: '${{ runner.temp }}/packed/DemoSolution_Managed.zip'
+          solution-folder: 'PowerPlatform/Solutions/DemoSolution'
+          solution-type: 'Managed'
+          overwrite-files: true
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: drop
+          path: '${{ runner.temp }}/packed/**'
+          overwrite: true
