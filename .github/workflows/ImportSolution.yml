@@ -6,6 +6,7 @@ on:
 jobs:
   import:
     runs-on: ubuntu-latest
+    environment: QA   # 🔥 REQUIRED so vars.QA_URL loads correctly
 
     steps:
       - name: Download Exported Solution
@@ -16,6 +17,12 @@ jobs:
 
       - name: Install Power Platform Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Debug Vars
+        run: |
+          echo "QA_URL=${{ vars.QA_URL }}"
+          echo "CLIENTID=${{ vars.CLIENTID }}"
+          echo "TENANTID=${{ vars.TENANTID }}"
 
       - name: Import Solution
         uses: microsoft/powerplatform-actions/import-solution@v1
