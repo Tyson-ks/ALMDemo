@@ -9,7 +9,15 @@ jobs:
 
     steps:
       - name: Checkout
+      # ------------------------------
         uses: actions/checkout@v4
+
+      # DEBUG STEP YOU ASKED FOR
+      - name: Debug Vars
+        run: |
+          echo "CLIENTID=${{ vars.CLIENTID }}"
+          echo "TENANTID=${{ vars.TENANTID }}"
+          echo "DEV_URL=${{ vars.DEV_URL }}"
 
       - name: Install Power Platform Tools
         uses: microsoft/powerplatform-actions/actions-install@v1
@@ -17,7 +25,7 @@ jobs:
       - name: Export Solution (Managed)
         uses: microsoft/powerplatform-actions/export-solution@v1
         with:
-          environment-url: ${{ vars.URL }}
+          environment-url: ${{ vars.DEV_URL }}
           app-id: ${{ vars.CLIENTID }}
           client-secret: ${{ secrets.CLIENTSECRET }}
           tenant-id: ${{ vars.TENANTID }}
