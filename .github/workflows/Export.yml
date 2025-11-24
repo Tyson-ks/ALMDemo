@@ -81,3 +81,35 @@ jobs:
           name: drop
           path: '${{ runner.temp }}/packed/**'
           overwrite: true
+
+      # --------------------- New Release Steps ---------------------
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: '${{ runner.temp }}/artifacts'
+          name: 'drop'
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id || github.run_id }}
+
+      - name: Import Solution
+        uses: microsoft/powerplatform-actions/import-solution@v1
+        with:
+          environment-url: ${{ vars.URL }}
+          app-id: ${{ vars.CLIENTID }}
+          client-secret: ${{ secrets.CLIENTSECRET }}
+          tenant-id: ${{ vars.TENANTID }}
+          solution-file: '${{ runner.temp }}/artifacts/DemoSolution_managed.zip'
+          activate-plugins: true
+          run-asynchronously: true
+          import-as-holding: true
+
+      - name: Upgrade Solution
+        uses: microsoft/powerplatform-actions/upgrade-solution@v1
+        with:
+          environment-url: ${{ vars.URL }}
+          app-id: ${{ vars.CLIENTID }}
+          client-secret: ${{ secrets.CLIENTSECRET }}
+          tenant-id: ${{ vars.TENANTID }}
+          solution-name: 'DemoSolution'
