@@ -20,7 +20,7 @@ jobs:
       - name: Import Solution
         uses: microsoft/powerplatform-actions/import-solution@v1
         with:
-          environment-url: ${{ vars.TARGET_URL }}
+          environment-url: ${{ vars.QA_URL }}
           app-id: ${{ vars.CLIENTID }}
           client-secret: ${{ secrets.CLIENTSECRET }}
           tenant-id: ${{ vars.TENANTID }}
