@@ -1,0 +1,29 @@
+name: Import Solution
+
+on:
+  workflow_dispatch:
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Exported Solution
+        uses: actions/download-artifact@v4
+        with:
+          name: exported-solution
+          path: "${{ runner.temp }}/import"
+
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+
+      - name: Import Solution
+        uses: microsoft/powerplatform-actions/import-solution@v1
+        with:
+          environment-url: ${{ vars.TARGET_URL }}
+          app-id: ${{ vars.CLIENTID }}
+          client-secret: ${{ secrets.CLIENTSECRET }}
+          tenant-id: ${{ vars.TENANTID }}
+          solution-file: "${{ runner.temp }}/import/DemoSolution_managed.zip"
+          activate-plugins: true
+          run-asynchronously: true
