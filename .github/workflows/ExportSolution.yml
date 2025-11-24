@@ -6,21 +6,20 @@ on:
 jobs:
   export:
     runs-on: ubuntu-latest
+    environment: DEV
 
     steps:
       - name: Checkout
-      # ------------------------------
         uses: actions/checkout@v4
 
-      # DEBUG STEP YOU ASKED FOR
+      - name: Install Power Platform Tools
+        uses: microsoft/powerplatform-actions/actions-install@v1
+
       - name: Debug Vars
         run: |
           echo "CLIENTID=${{ vars.CLIENTID }}"
           echo "TENANTID=${{ vars.TENANTID }}"
           echo "DEV_URL=${{ vars.DEV_URL }}"
-
-      - name: Install Power Platform Tools
-        uses: microsoft/powerplatform-actions/actions-install@v1
 
       - name: Export Solution (Managed)
         uses: microsoft/powerplatform-actions/export-solution@v1
