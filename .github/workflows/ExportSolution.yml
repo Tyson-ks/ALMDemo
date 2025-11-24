@@ -28,6 +28,7 @@ jobs:
           app-id: ${{ vars.CLIENTID }}
           client-secret: ${{ secrets.CLIENTSECRET }}
           tenant-id: ${{ vars.TENANTID }}
+          solution-name: DemoSolution
           managed: true
           solution-output-file: "${{ runner.temp }}/DemoSolution_managed.zip"
           run-asynchronously: true
