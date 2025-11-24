@@ -1,36 +1,26 @@
 name: Import Solution
-
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Export Solution"]
+    types: [completed]
 
 jobs:
   import:
     runs-on: ubuntu-latest
-    environment: QA   # 🔥 REQUIRED so vars.QA_URL loads correctly
+    environment: QA
 
     steps:
-      - name: Download Exported Solution
-        uses: actions/download-artifact@v4
-        with:
-          name: exported-solution
-          path: "${{ runner.temp }}/import"
-
-      - name: Install Power Platform Tools
-        uses: microsoft/powerplatform-actions/actions-install@v1
-
       - name: Debug Vars
         run: |
           echo "QA_URL=${{ vars.QA_URL }}"
           echo "CLIENTID=${{ vars.CLIENTID }}"
           echo "TENANTID=${{ vars.TENANTID }}"
-
-      - name: Import Solution
-        uses: microsoft/powerplatform-actions/import-solution@v1
+          
+      - name: Download Exported Solution
+        uses: actions/download-artifact@v4
         with:
-          environment-url: ${{ vars.QA_URL }}
-          app-id: ${{ vars.CLIENTID }}
-          client-secret: ${{ secrets.CLIENTSECRET }}
-          tenant-id: ${{ vars.TENANTID }}
-          solution-file: "${{ runner.temp }}/import/DemoSolution_managed.zip"
-          activate-plugins: true
-          run-asynchronously: true
+          name: exported-solution
+          path: "${{ runner.temp }}/import"
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
